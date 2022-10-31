@@ -1,0 +1,19 @@
+{
+  "name": "reb",
+  "version": "1.4.3",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "WilckerK",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^13.7.0",
+    "dotenv": "^16.0.1",
+    "jimp": "^0.15.0",
+    "jpeg-js": "^0.4.4",
+    "mongodb": "^4.6.0"
+  }
+}
