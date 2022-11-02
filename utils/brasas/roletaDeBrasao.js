@@ -23,7 +23,7 @@ try {
 	        const diferenca = new Date(ficha.bras.tempoParaRoletar.getTime() - dataAtual.getTime());
 	        message.reply({content:  `Você ainda terá que esperar ${diferenca.getUTCHours() } horas e ${diferenca.getUTCMinutes()} minutos.`, ephemeral: true});
 	        return
-	    }else if(dataAtual.getTime() > ficha.bras.tempoParaRoletar.getTime()){
+	    }else if(dataAtual.getTime() >= ficha.bras.tempoParaRoletar.getTime()){
 	        dataAtual.setUTCHours(dataAtual.getUTCHours() + 3);
 	        ficha.bras.tempoParaRoletar = dataAtual;
 	        ficha.bras.roletasMax = 4;

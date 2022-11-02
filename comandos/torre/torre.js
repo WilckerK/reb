@@ -20,14 +20,7 @@ module.exports = class extends comando{
         }
 
         const ficha = await checkUser(interaction.db, user.id);
-        if(!ficha.torre){
-            if(interaction.member.user != user){
-                interaction.reply({content: 'Essa pessoa não tem uma torre ainda.', ephemeral: true});
-                return
-            }
-            await this.contruir(interaction, ficha)
-            return
-        }else if(ficha.torre.nivel == 0){
+        if(ficha.torre.nivel == 0){
             if(interaction.member.user != user){
                 interaction.reply({content: 'Essa pessoa não tem uma torre ainda.', ephemeral: true});
                 return
@@ -147,7 +140,7 @@ _ _   _|_   _ _
             return
         }
         let atacante = ''
-        if(ficha.torre){
+        if(ficha.torre.atacado == true){
             atacante = `\n***Sua torre foi destruída por <@${ficha.torre.atacante}>***\n**◇◆ ▬▬▬▬▬▬▬◆◇◆◇▬▬▬▬▬▬▬ ◆◇**`
         }
         let msg = new MessageEmbed()

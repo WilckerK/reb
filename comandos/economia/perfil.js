@@ -57,7 +57,9 @@ module.exports = class extends comando{
         for (let i = 0; i < fundos.length; i++) {
             if(fundos[i][1] > 0){
                 if(txtFundos.length >= 5){txtFundos = txtFundos + '/ '}
-                if(txtFundos.length >= 50){txtFundos = txtFundos + '\n'}
+                if(txtFundos.length >= 46 && txtFundos.length <= 90 || txtFundos.length >= 91){
+                    txtFundos = txtFundos + '\n'
+                }
                 txtFundos = txtFundos + `**${fundos[i][0]}:** *${fundos[i][1]}*`;
             }
         }

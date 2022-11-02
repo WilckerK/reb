@@ -13,7 +13,7 @@ module.exports = class extends Evento {
             virarDoDia(this.client);
             if(message.author.bot)
                 {return}
-
+            //Só de meme =====================================================
             if(message.content.toLowerCase() == "hype <:rbw_hype:800827734414327828>"){
                 const {MessageEmbed} = require('discord.js');
                 let msg = new MessageEmbed()
@@ -35,7 +35,7 @@ module.exports = class extends Evento {
                 return
             }
 
-            //drops
+            //drops =================================SPAWN RATE==================================
             if(Math.ceil(Math.random() * 125) == 125){
                 const drops = require('../../utils/economia/drops');
                 await drops(message, this.client);
@@ -52,7 +52,7 @@ module.exports = class extends Evento {
                 const rbw = await this.client.guilds.cache.get('732276333429784707');
                 if(await rbw.channels.cache.get('1028819143992025099').name != '『📕』missão'){
                     const missoes = require('../../utils/bews/editar/missoes');
-                   await missoes(this.client);
+                    //await missoes(this.client);
                 }
             }
 
@@ -70,7 +70,7 @@ module.exports = class extends Evento {
             }
 
             
-            //valuation
+            //valuation ========================CHATS ESPECIFICOS====================================
             if((listaDeChannels.indexOf(message.channelId) !== -1)){
                 const valuation = require('../../utils/economia/valuation');
                 await valuation(message.channelId, this.client); 

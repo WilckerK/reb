@@ -7,6 +7,8 @@ module.exports = async(client) =>{
 	    const objetoPrincipal = await fundos.findOne({"_id" : "01"});
 	    let horaDoFechamento = new Date(objetoPrincipal.fechamento);
 	    if(dataAtual.getTime() >= horaDoFechamento.getTime()){ //olha se é a hr de fechar a bolsa
+			dataAtual.setUTCHours(24,0,0,0);
+			await fundos.updateOne({"_id" : "01"}, {$set: {fechamento: dataAtual}}, { upsert: true });
 	        quitanda(fundos)
 	        fecharBolsa(fundos);
 	        impostos();
@@ -49,11 +51,6 @@ module.exports = async(client) =>{
 	        const porcentagem = Math.round((valor * 100)/valorAntigo);
 	        await fundos.updateOne({"_id" : channel}, {$set: {valor: valor, valuation: 0, balance: porcentagem}}, { upsert: true });
 	    });
-	
-	    const horaDoFechamento = new Date();
-	    horaDoFechamento.setUTCHours(24,0,0,0);
-	    
-	    await fundos.updateOne({"_id" : "01"}, {$set: {fechamento: horaDoFechamento}}, { upsert: true });
 	}
 	
 	async function impostos(){

@@ -3,7 +3,7 @@ module.exports = async(message, client) =>{
     try {
 	    const checkUser = require('../checkUser');
 	    const ficha = await checkUser(client.db, message.author.id);
-	    if(ficha.rewbs <= 300)
+	    if(ficha.rewbs <= 700)
 	        {return}
 	
 	    const valor = Math.ceil(ficha.rewbs / 10);

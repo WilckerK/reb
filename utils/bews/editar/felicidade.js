@@ -22,7 +22,7 @@ module.exports = async (db, client) =>{
                 member.send({content: 'Seu bew '+ bew.nome +' está morrendo de fome, por favor o alimente o mais rápido possível!!!'}).catch((err) => {});
             }
             if(member && bew.felicidade == 1){
-                member.send({content: 'Seu bew '+ bew.nome +' está quase fugindo, tente aliemnta-lo para que mude de ideia!!!'}).catch((err) => {});
+                member.send({content: 'Seu bew '+ bew.nome +' está quase fugindo, tente alimenta-lo para que mude de ideia!!!'}).catch((err) => {});
             }
         } catch (err) {}
         
@@ -40,7 +40,7 @@ module.exports = async (db, client) =>{
 
         arrayBews.splice(index, 1);
         ficha.bews = arrayBews;
-        ficha.rewbs -= 200;
+        ficha.rewbs -= Math.ceil(ficha.rewbs / 15);
         
         await updateUser(db, ficha);
     }catch(err){}

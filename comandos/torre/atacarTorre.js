@@ -85,8 +85,12 @@ module.exports = class extends comando{
                     const element = fichaA.bews[i + 1];
                     const bewDB = await interaction.db.collection('bews');
                     let bew = await bewDB.findOne({"_id": element.bewId});
-                    bew.felicidade = (bew.felicidade > 20)?bew.felicidade - 10:
-                    (bew.felicidade < 7)?1:bew.felicidade - 5;
+                    if(bew.felicidade <= 35){            
+                        interaction.reply({content: 'Seus bews estão muito famintos, para poderem ir atacar uma torre.', ephemeral: true})
+                        collector.stop('time') //Time pq ai ele só retorna, gambiarra :) 
+                        return
+                    }
+                    bew.felicidade -= 10
                     bewDB.updateOne({"_id":bew._id}, {$set: {"felicidade": bew.felicidade}});
                     mediaRank += bew.rank;
                 }catch(err){}
@@ -104,6 +108,8 @@ module.exports = class extends comando{
             if(reason === 'time')
                 {return}
             fichaA.rewbs -= fichaB.torre.nivel * 200;
+            dataAtual.setUTCHours(dataAtual.getUTCHours() + 2);
+            fichaA.torre.tempoDeAtaque = dataAtual;
             if(reason === 'Venceu'){
                 fichaB.torre.nivel = (fichaB.torre.nivel - 2 <= 0)?0:fichaB.torre.nivel - 2;
                 const valorPegue = Math.ceil(fichaB.rewbs/4);
@@ -112,8 +118,6 @@ module.exports = class extends comando{
                 fichaB.torre.atacante = fichaA._id;
                 fichaA.rewbs += valorPegue;
                 fichaA.torre.ataquesVencidos++;
-                dataAtual.setUTCHours(dataAtual.getUTCHours() + 2);
-                fichaA.torre.tempoDeAtaque = dataAtual;
 
                 msg = new MessageEmbed()
                 .setTitle('Torre Atacada')
@@ -121,7 +125,9 @@ module.exports = class extends comando{
                 .setDescription('**Vitória!!!**' + '\n**◇◆ ▬▬▬▬▬▬◆◇◆◇▬▬▬▬▬▬ ◆◇**\n' + `Você **derrubou** a torre de <@${fichaB._id}> e venceu.\nNão se esqueça de dedicar essa vitória aos seus bews!!!`+
                 '\n**◇◆ ▬▬▬▬▬▬◆◇◆◇▬▬▬▬▬▬ ◆◇**\n' + `Você levou **${valorPegue} Rewbs** dessa pessoa.\n*Não se esqueça que ela pode tentar se **vingar***` +'\n**◇◆ ▬▬▬▬▬▬◆◇◆◇▬▬▬▬▬▬ ◆◇**')
                 .setFooter({text: 'WK Company', iconURL: 'https://i.imgur.com/B73wyqP.gif'})
-                .setTimestamp()
+                .setTimestamp();
+
+                await updateUser(interaction.db,  fichaB);
             }
             else if(reason === 'Perdeu'){
                 msg = new MessageEmbed()
@@ -134,7 +140,6 @@ module.exports = class extends comando{
             }
 
             await updateUser(interaction.db,  fichaA, interaction.channel);
-            await updateUser(interaction.db,  fichaB);
 
             await enviada.edit({embeds: [msg]});
         })
