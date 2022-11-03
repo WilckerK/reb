@@ -73,18 +73,6 @@ module.exports = class extends comando{
         const updateUser = require('../../utils/updateUser');
         const ficha = await checkUser(interaction.db, interaction.member.id);
 
-        if(!ficha.bras){
-            ficha.bras = {
-                roletas: 4,
-                roletasMax: 4,
-                brasoes:{
-                    RE: 0,EP: 0,MU: 0,EN: 0,SO: 0,BO: 0,LI: 0,FE: 0,RO: 0,CA: 0,MI: 0,ET: 0,NU: 0,CI: 0,FO: 0,AN: 0,
-                },
-                brasas:[],
-                pego: false
-            }
-        }
-
         for (let i = 0; i < brasDoCMD.length; i++) {
             const element = brasDoCMD[i];
             if(ficha.bras.brasoes[element] < 1){

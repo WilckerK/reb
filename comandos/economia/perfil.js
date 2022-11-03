@@ -41,6 +41,21 @@ module.exports = class extends comando{
             if(member.roles.cache.has('798909343738888193')){cargos.push('Fallen Warrior')}
 
         const ficha = await checkUser(interaction.db, user.id);
+        let mina = '';
+        if(ficha.mina){
+            if(ficha.mina.local != 0){
+                const listaMinasPicaretas = require('../../utils/mina/listaMinasPicaretas');
+                const localMina = listaMinasPicaretas('local', ficha.mina.local)
+                mina = '\n**Local de Mineração:** \`' + localMina[0] + '\`';
+            }
+        }
+        let brasas = '';
+        if(ficha.bras){
+            if(ficha.bras.brasas.length > 0){
+                const listaDeBrasas = require('../../utils/brasas/listaDeBrasas');
+                brasas = '**Brasas: **' + `${ficha.bras.brasas.length}/${listaDeBrasas.length}🔥`;
+            }
+        }
         let geladeira = [];
         for (let i = 0; i < ficha.geladeira.length; i++) {
             if(i == 5){geladeira[4] = '**...**';break;}
@@ -56,22 +71,16 @@ module.exports = class extends comando{
         let txtFundos = '';
         for (let i = 0; i < fundos.length; i++) {
             if(fundos[i][1] > 0){
-                if(txtFundos.length >= 5){txtFundos = txtFundos + '/ '}
-                if(txtFundos.length >= 46 && txtFundos.length <= 90 || txtFundos.length >= 91){
-                    txtFundos = txtFundos + '\n'
+                if(txtFundos.length >= 5){
+                    if((txtFundos.length >= 46 && txtFundos.length <= 55) || txtFundos.length >= 100){
+                        txtFundos = txtFundos + '\n'
+                    }else{txtFundos = txtFundos + '/ '}
                 }
                 txtFundos = txtFundos + `**${fundos[i][0]}:** *${fundos[i][1]}*`;
             }
         }
         if(txtFundos != ''){txtFundos = '**Fundos: **\n' + txtFundos + '\n**◇◆ ▬▬▬▬▬▬◆◇◆◇▬▬▬▬▬▬ ◆◇**\n';}
 
-        let brasas = '';
-        if(ficha.bras){
-            if(ficha.bras.brasas.length > 0){
-                const listaDeBrasas = require('../../utils/brasas/listaDeBrasas');
-                brasas = '**Brasas: **' + `${ficha.bras.brasas.length}/${listaDeBrasas.length}🔥`;
-            }
-        }
         let torres = '';
         if(ficha.torre){
             if(ficha.torre.ataquesVencidos > 0){
@@ -95,7 +104,7 @@ module.exports = class extends comando{
             .setTitle(`${user.username} - Perfil`)
             .setColor(0x700000)
             .setThumbnail(user.displayAvatarURL({format: "png"}))
-            .setDescription('\n**◇◆ ▬▬▬▬▬▬◆◇◆◇▬▬▬▬▬▬ ◆◇**\n' + `**Rewbs: ${ficha.rewbs}**\n` + `** Cargos: ${cargos.join(', ') || null}**` + '\n**◇◆ ▬▬▬▬▬▬◆◇◆◇▬▬▬▬▬▬ ◆◇**\n' +
+            .setDescription('\n**◇◆ ▬▬▬▬▬▬◆◇◆◇▬▬▬▬▬▬ ◆◇**\n' + `**Rewbs: ${ficha.rewbs}** // Cofre: ${ficha.cofre}\n` + `** Cargos: ${cargos.join(', ') || null}**${mina}` + '\n**◇◆ ▬▬▬▬▬▬◆◇◆◇▬▬▬▬▬▬ ◆◇**\n' +
             `**Bews:** ${ficha.bews.length - 1} // ${brasas}\n**Geladeira:** ${geladeira.join(', ') || 'Vazia'}` + '\n**◇◆ ▬▬▬▬▬▬◆◇◆◇▬▬▬▬▬▬ ◆◇**\n' + `${txtFundos}`+ `${torres}` + `${txtFrase.join('')}`)
             .setFooter({text: 'WK Company', iconURL: 'https://i.imgur.com/B73wyqP.gif'})
             .setTimestamp()

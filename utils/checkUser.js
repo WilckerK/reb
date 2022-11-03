@@ -24,10 +24,18 @@ module.exports = async(db, userID) => {
             user.torre = {
                 nivel: 0,
                 tempoDeAtaque: new Date(),
-                brasoesNecessarios:[torreBrasoes[1], torreBrasoes[2]],
+                brasoesNecessarios:[],
                 atacado: false,
                 atacante: null,
                 ataquesVencidos: 0
+            }
+        }
+        if(!user.mina){
+            user.mina = {
+                carvoes: 0,
+                local: 0,
+                picareta: 0,
+                bewMinerador: null
             }
         }
     }catch{

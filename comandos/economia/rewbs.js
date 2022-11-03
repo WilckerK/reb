@@ -2,7 +2,6 @@ const { MessageEmbed } = require('discord.js');
 const comando = require('../../estrutura/Comando');
 const checkUser = require('../../utils/checkUser');
 const updateUser = require('../../utils/updateUser');
-
 module.exports = class extends comando{
     constructor(client){
         super(client, {
@@ -22,7 +21,7 @@ module.exports = class extends comando{
             return
         }
 
-        const valor = 40 + Math.floor(Math.random() * (16 + (ficha.bews.length * 5)));
+        const valor = 70 + Math.floor(Math.random() * (36 + (ficha.bews.length * 5)));
 
         ficha.rewbs += valor;
         dataAtual.setUTCHours(dataAtual.getUTCHours() + 20);
