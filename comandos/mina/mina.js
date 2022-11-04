@@ -175,7 +175,7 @@ module.exports = class extends comando{
                 .setTitle('Mina de Carvão')
                 .setColor(0x010101)
                 .setDescription(`**◇◆ ▬▬▬▬▬▬◆◇◆◇▬▬▬▬▬▬ ◆◇**\n**Carvões:** ${ficha.mina.carvoes} // **Picareta:** ${picareta[0]} \n**Local: ${local[0]}**`+
-                `\n**◇◆ ▬▬▬▬▬▬◆◇◆◇▬▬▬▬▬▬ ◆◇**\nPara começar a minerar mande o comando novamente.` + `${bewFrase}` + '\n**◇◆ ▬▬▬▬▬▬◆◇◆◇▬▬▬▬▬▬ ◆◇**\n' +
+                `\n**◇◆ ▬▬▬▬▬▬◆◇◆◇▬▬▬▬▬▬ ◆◇**\nPara começar a minerar mande o comando novamente.` + '\n**◇◆ ▬▬▬▬▬▬◆◇◆◇▬▬▬▬▬▬ ◆◇**\n' +
                 `Próximo local: **${3000 + (ficha.mina.local * 2000)} Rewbs** e **${750 * ficha.mina.local} Carvões**` +
                 `\nPróxima picareta: **${ficha.mina.picareta * 1000} Carvões**${precisaDeBrasas}`)
                 .setImage(local[2])

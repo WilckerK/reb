@@ -2,7 +2,6 @@ const comando = require('../../estrutura/Comando');
 const checkUser = require('../../utils/checkUser');
 const invocacao = require('../../utils/bews/criar/invocacao');
 const updateUser = require('../../utils/updateUser');
-
 module.exports = class extends comando{
     constructor(client){
         super(client, {
@@ -14,13 +13,12 @@ module.exports = class extends comando{
 
     run = async(interaction, client) => {
         const ficha = await checkUser(interaction.db, interaction.member.id);
-        const custo = 200;
+        const custo = 200 * ficha.bews.length;
 
         if (ficha.rewbs < custo){
             interaction.reply({content: 'Você infelizmente não tem Rewbs o suficiente.', ephemeral: true});
             return
         }
-
         if (ficha.bews.length - 1 == ficha.bews[0]){
             interaction.reply({content: 'Sua caixa de Bews está cheia, tente comprar mais espaço.', ephemeral: true});
             return

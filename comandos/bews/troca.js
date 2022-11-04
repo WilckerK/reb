@@ -82,14 +82,10 @@ module.exports = class extends comando{
 
                     [fichaA.bews[bewDoUserA], fichaB.bews[bewDoUserB]] = [fichaB.bews[bewDoUserB], fichaA.bews[bewDoUserA]];
                     
-                    fichaA.bews[bewDoUserA].pos = bewDoUserA;
-                    fichaB.bews[bewDoUserB].pos = bewDoUserB;
-
-                    
                     const bewDB = await interaction.db.collection('bews');
 
                     await bewDB.updateOne({_id: fichaA.bews[bewDoUserA].bewId}, {$set: {dono: [userA]}});
-                    await bewDB.updateOne({_id: fichaB.bews[bewDoUserB].pos.bewId}, {$set: {dono: [userB]}});
+                    await bewDB.updateOne({_id: fichaB.bews[bewDoUserB].bewId}, {$set: {dono: [userB]}});
 
                     await updateUser(interaction.db, fichaA);
                     await updateUser(interaction.db, fichaB);
@@ -113,7 +109,7 @@ module.exports = class extends comando{
             }
             collector.stop();
         })
-        collector.on('end', async(collected, reason) => {
+        collector.on('end', async(reason) => {
             if (reason === 'time'){
                 const timeMsg = new MessageEmbed()
                     .setTitle('Seção Finalizada')

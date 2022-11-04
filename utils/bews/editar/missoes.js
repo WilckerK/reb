@@ -115,7 +115,7 @@ module.exports = async(client) =>{
                 .setTitle('Enviado com sucesso.')
                 .setColor(0x700000)
                 .setDescription('\n**◇◆ ▬▬▬▬▬▬◆◇◆◇▬▬▬▬▬▬ ◆◇**\n' + 
-                `**${bew.nome}** foi e concluiu a missão. Daqui alguns minutos ele deve retornar.` + '\n**◇◆ ▬▬▬▬▬▬◆◇◆◇▬▬▬▬▬▬ ◆◇**\n' + 
+                `**${bew.nome}** foi e concluiu a missão. \nDaqui alguns minutos ele deve retornar.` + '\n**◇◆ ▬▬▬▬▬▬◆◇◆◇▬▬▬▬▬▬ ◆◇**\n' + 
                 `Você recebeu **${rewbsGanhos} Rewbs** pela missão.`)
                 .setTimestamp();
 
@@ -124,7 +124,7 @@ module.exports = async(client) =>{
                 .setTitle('Fracassou na missão.')
                 .setColor(0x000070)
                 .setDescription('\n**◇◆ ▬▬▬▬▬▬◆◇◆◇▬▬▬▬▬▬ ◆◇**\n' + 
-                `**${bew.nome}** partiu para a missão e falhou. Daqui alguns minutos ele deve retornar.` + '\n**◇◆ ▬▬▬▬▬▬◆◇◆◇▬▬▬▬▬▬ ◆◇**\n' + 
+                `**${bew.nome}** partiu para a missão e falhou. \nDaqui alguns minutos ele deve retornar.` + '\n**◇◆ ▬▬▬▬▬▬◆◇◆◇▬▬▬▬▬▬ ◆◇**\n' + 
                 `Desejo mais sorte na próxima vez.`)
                 .setTimestamp();
         }

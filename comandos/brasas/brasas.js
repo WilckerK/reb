@@ -1,6 +1,8 @@
 const { MessageEmbed} = require('discord.js');
 const comando = require('../../estrutura/Comando');
 const listaDeBrasas = require('../../utils/brasas/listaDeBrasas');
+const checkUser = require('../../utils/checkUser');
+const { indexOf } = require('../../utils/listaDeChannels');
 
 module.exports = class extends comando{
     constructor(client){
@@ -17,9 +19,11 @@ module.exports = class extends comando{
                 (frase == 2)?'Aqui se tem as brasas de cada faísca da Rebewllion...':
                 (frase == 3)?'Enquanto houver um de nós, a Rebewllion vai arder com a chama da vitória...':
                 'O fogo queima a memória de dias ardentes...'
+        const ficha = await checkUser(interaction.db, interaction.user.id);
         let txt = ``; var inicio = 0; var fim = 7;
         for (let i = inicio; i <= fim; i++) {
             const element = listaDeBrasas[i];
+            if(ficha.bras.brasas.indexOf(element[1]) != -1){txt = txt + '🔥'}
             txt = txt + `**${element[1]}** ~> \`${element[0].join(', ')}\` ~> ***\"${element[2]}\"***\n`;
         }
         let msg = new MessageEmbed()
@@ -57,6 +61,7 @@ module.exports = class extends comando{
 
                 for (let i = inicio; i <= fim; i++) {
                     const element = listaDeBrasas[i];
+                    if(ficha.bras.brasas.indexOf(element[1]) != -1){txt = txt + '🔥'}
                     txt = txt + `**${element[1]}** ~> \`${element[0].join(', ')}\` ~> ***\"${element[2]}\"***\n`;
                 }
                 
