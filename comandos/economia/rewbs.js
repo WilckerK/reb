@@ -20,8 +20,8 @@ module.exports = class extends comando{
             interaction.reply({content: `Você deve esperar o intervalo para receber um outro daily de Rewbs. Ainda faltam ${diferenca.getUTCHours()} horas e ${diferenca.getUTCMinutes()} minutos.`, ephemeral: true});
             return
         }
-
-        const valor = 70 + Math.floor(Math.random() * (36 + (ficha.bews.length * 5)));
+        const taxaRiqueza = (100 - Math.ceil(ficha.rewbs / 500) < 0)?0:100 - Math.ceil(ficha.rewbs / 500); 
+        const valor = 50 + taxaRiqueza + Math.floor(Math.random() * (36 + (ficha.bews.length * 5)));
 
         ficha.rewbs += valor;
         dataAtual.setUTCHours(dataAtual.getUTCHours() + 20);

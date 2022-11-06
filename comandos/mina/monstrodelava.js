@@ -5,56 +5,47 @@ const updateUser = require('../../utils/updateUser');
 module.exports = class extends comando{
     constructor(client){
         super(client, {
-            nome: 'fabrica' ,
-            desc: 'Vende seus carvões para a fábrica.',
+            nome: 'monstrodelava' ,
+            desc: 'Oferece carvões para o monstro.',
             requireDatabase: true,
             options: [
                 {
                     name: 'quantidade',
                     type:'INTEGER',
                     description: 'Quantos carvões vai oferecer?',
-                    required: false
+                    required: true
                 }
             ]
         })
     }
 
-    valor = async(interaction, preco) => {
-        const txtFrase = (Math.ceil(Math.random() * 3) == 3)?'O local faz a mineração ser mais rápida.':
-        (Math.ceil(Math.random() * 2) == 2)?'A picareta te faz minerar mais por mineração':'O preço do carvão é decido pela fábrica para cada usuário em relação ao perfil.';
-        
-        let msg = new MessageEmbed()
-            .setTitle('Fábrica')
-            .setColor(0x700000)
-            .setDescription(`**◇◆ ▬▬▬▬▬▬◆◇◆◇▬▬▬▬▬▬ ◆◇**\nAqui é o local onde se vende os carvões obtidos com o comando /mina.\n` +
-                `${txtFrase}\n**◇◆ ▬▬▬▬▬▬◆◇◆◇▬▬▬▬▬▬ ◆◇**\nA fábrica irá te pagar ${preco} por carvão.\n**◇◆ ▬▬▬▬▬▬◆◇◆◇▬▬▬▬▬▬ ◆◇**\n`)
-            .setImage('https://cdn.discordapp.com/attachments/1008488078542917712/1038119160976253018/fabrica.png')
-            .setFooter({text: 'WK Company', iconURL: 'https://i.imgur.com/B73wyqP.gif'})
-            .setTimestamp()
-        interaction.reply({embeds: [msg]});
-    }
-
     run = async(interaction) => {
         const quantidade = interaction.options.getInteger('quantidade');
         const ficha = await checkUser(interaction.db, interaction.user.id);
-        const acoes = ficha.fundos.filter((element) =>{return element.qtd != 0})
-        let preco = 1 - (((ficha.bews.length - 1) / 80) - (ficha.torre.nivel / 50) - (cofre / 10) - (acoes / 20) + (ficha.mina.local / 10))
-        preco = parseFloat(preco.toFixed(2))
-
-        if(!quantidade){
-            this.valor(interaction, preco);
-            return
-        }
 
         if(ficha.mina.carvoes < quantidade){
             await interaction.reply({ content: `Você não tem essa quantidade de carvões para vender.`, ephemeral: true});
             return
         }
-        const valor = Math.round(preco * quantidade)
-        ficha.rewbs += valor;
-        ficha.mina.carvoes -= quantidade;
-        txt = 'Parabéns você vendeu **' + quantidade + '** de carvões!!!\n' + 
-        `Você recebeu **${valor} Rewbs**!\n`
+
+        const porcentagem = Math.ceil(Math.random() * 100);
+        let txt = ''
+        if(porcentagem <= 50){
+            ficha.mina.carvoes += Math.floor(quantidade / 2);
+            txt = 'O monstro te devolveu tudo o que ofereceu mais metade.' + 
+            `\nVocê ganhou ${Math.floor(quantidade / 2)} carvões.`
+        }else if(porcentagem <= 60){
+            ficha.mina.carvoes += quantidade;
+            txt = 'O monstro te devolveu o dobro do que ofereceu.' + 
+            `\nVocê ganhou ${quantidade} carvões.`
+        }else if(porcentagem <= 80){
+            txt = 'O monstro só te devolveu o que ofereceu.' + 
+            `\nEle não se interessou pela oferta de carvões.`
+        }else if(porcentagem <= 100){
+            ficha.mina.carvoes -= quantidade;
+            txt = 'O monstro só levou tudo o que ofereceu.' + 
+            `\nVocê perdeu os ${quantidade} carvões.`
+        }
         
         await updateUser(interaction.db, ficha, interaction.channel);
         txt = txt + '**◇◆ ▬▬▬▬▬▬▬◆◇◆◇▬▬▬▬▬▬▬ ◆◇**\n'
@@ -74,6 +65,7 @@ module.exports = class extends comando{
             .setTitle('Carvões vendidos!')
             .setColor(0x700000)
             .setDescription(`**◇◆ ▬▬▬▬▬▬▬◆◇◆◇▬▬▬▬▬▬▬ ◆◇**\n${txt}`)
+            .setImage('https://cdn.discordapp.com/attachments/1008488078542917712/1038902779948826734/Gold_Forrest_fire_monster_0cc65c60-540b-4df1-a510-8b3c1126b70d.png')
             .setFooter({text: 'WK Company', iconURL: 'https://i.imgur.com/B73wyqP.gif'});
         interaction.reply({embeds: [msg]});
     }
