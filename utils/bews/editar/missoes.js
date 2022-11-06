@@ -58,7 +58,7 @@ module.exports = async(client) =>{
         .setFooter({text: 'WK Company', iconURL: 'https://i.imgur.com/B73wyqP.gif'});
     const enviada = await channel.send({content : `<@&1031223545382043709>`, embeds: [msg], fetchReply: true})
     
-    const filter = m => !m.author.bot && m.content.length < 8 && m.content.length > 2  && 
+    const filter = m => !m.author.bot && m.content.length < 8 && m.content.length > 2  && m.content.indexOf(' ') == -1 &&
     'áéíóúàèìòùãõâêîôû.,;:/?][<)(1234567890!@#$%&*-_+="\\|'.indexOf(m.content[0].toLowerCase()) == -1;
     const collector = await channel.createMessageCollector({ filter, time: 5 * 60000 });
 
@@ -78,7 +78,7 @@ module.exports = async(client) =>{
         bewDoUser = bewDoUser[0];
 
         if(!bewDoUser){
-            await m.reply({content: 'Você não possui um Bew com esse nome.', ephemeral: true});
+            await m.reply({content: 'Você não possui um Bew com esse nome na caixa.', ephemeral: true});
             return
         }
         if(ficha.bews.length == 2){
@@ -88,6 +88,7 @@ module.exports = async(client) =>{
 
         const bewDB = await client.db.collection('bews');
         const bew = await bewDB.findOne({"_id": bewDoUser.bewId});
+        
 
         if(bew.rank < requisitos.rank || bew.status.ATQ < requisitos.atq || bew.status.RES < requisitos.res){
             await m.reply({content: 'O Bew escolhido não atende aos requisitos da missão.', ephemeral: true});

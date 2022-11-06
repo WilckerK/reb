@@ -23,6 +23,10 @@ module.exports = class extends comando{
         const ficha = await checkUser(interaction.db, interaction.member.id);
         const nomeDoBew =  interaction.options.getString('nome').toLowerCase()
         if(ficha.mina.bew == null){
+            if (!nomeDoBew){
+                interaction.reply({content: 'Escreva o nome do bew que deseja deixar mineirando.', ephemeral: true});
+                return
+            }
             if (ficha.bews.length == 2){
                 interaction.reply({content: 'Você não pode colocar o seu único bew.', ephemeral: true});
                 return
@@ -38,13 +42,17 @@ module.exports = class extends comando{
             }
 
             ficha.mina.bew = bewDoUser;
+            const indexDoBew = Array.from(ficha.bews).indexOf(bewDoUser);
+            ficha.bews.splice(indexDoBew, 1);
+            ficha.bews[0]--;
+            
             await updateUser(interaction.db, ficha);
             let msg = new MessageEmbed()
                 .setTitle('Bew minerador')
                 .setColor(0x101010)
-                .setDescription('\n**◇◆ ▬▬▬▬▬▬◆◇◆◇▬▬▬▬▬▬ ◆◇**\n' + 
-                `**${bew.nome}** Foi enviado para a mineradora.` + '\n**◇◆ ▬▬▬▬▬▬◆◇◆◇▬▬▬▬▬▬ ◆◇**\n' + 
-                `Lembre-se sempre de checar a felicidade dele.`)
+                .setDescription('**◇◆ ▬▬▬▬▬▬◆◇◆◇▬▬▬▬▬▬ ◆◇**\n' + 
+                `**${bew.nome}** foi enviado para a mineradora.` + '\n**◇◆ ▬▬▬▬▬▬◆◇◆◇▬▬▬▬▬▬ ◆◇**\n' + 
+                `*Lembre-se sempre de checar a felicidade dele.*`)
                 .setTimestamp();
             await interaction.reply({embeds:[msg]})
             return
@@ -115,6 +123,8 @@ module.exports = class extends comando{
         collector.on('collect', async(reaction) => {
             const fulano = await checkUser(interaction.db, ficha._id);
             fulano.mina.bew = null;
+            fulano.bews[0]++;
+            fulano.bews.splice(1, 0, bewDoUser);
             await updateUser(interaction.db, fulano._id);
             collector.stop();
         })

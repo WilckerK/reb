@@ -94,7 +94,7 @@ module.exports = class extends comando{
                     const confirmMsg = new MessageEmbed()
                         .setTitle('Aprovada')
                         .setColor(0x700000)
-                        .setDescription(`A troca entre <@${userB}> e <@${userA}> foi concluída com sucesso.`)
+                        .setDescription(`**◇◆ ▬▬▬▬▬▬◆◇◆◇▬▬▬▬▬▬ ◆◇**\nA troca entre <@${userB}> e <@${userA}> foi concluída com sucesso.\n**◇◆ ▬▬▬▬▬▬◆◇◆◇▬▬▬▬▬▬ ◆◇**`)
                         .setFooter({text: 'WK Company', iconURL: 'https://i.imgur.com/B73wyqP.gif'});
                     await enviada.channel.send({embeds: [confirmMsg]});
 

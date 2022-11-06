@@ -21,7 +21,12 @@ module.exports = class extends comando{
         const local = listaMinasPicaretas('local', ficha.mina.local);
         const picareta = listaMinasPicaretas('picareta', ficha.mina.picareta)
         const precisaDeBrasas = (ficha.mina.picareta == 3)?'\n**◇◆ ▬▬▬▬▬▬◆◇◆◇▬▬▬▬▬▬ ◆◇**\nPara melhorar a Picareta de Diamante para uma Picareta de Brasas, é preciso que você ofereça todas as brasas existentes e torne suas brasas acendidas em cinzas.':'';
-        const bewFrase = (ficha.mina.bewMinerador !== null)?'\n**◇◆ ▬▬▬▬▬▬◆◇◆◇▬▬▬▬▬▬ ◆◇**\n' + `Seu bew ${ficha.mina.bewMinerador} ainda está mineirando.`:'';
+        let bewFrase = '';
+        if(ficha.mina.bewMinerador !== null){
+            const bewDB = await interaction.db.collection('bews');
+            const bew = await bewDB.findOne({"_id": element.bewId});
+            bewFrase = `\n**◇◆ ▬▬▬▬▬▬◆◇◆◇▬▬▬▬▬▬ ◆◇**\nSeu bew ${bew.nome} ainda está mineirando. ~[${bew.felicidade}]`;
+        }
 
         const txtFrase = (Math.ceil(Math.random() * 3) == 3)?'O local faz a mineração ser mais rápida.':
         (Math.ceil(Math.random() * 2) == 2)?'A picareta te faz minerar mais por mineração':'Para vender seus carvões use /fabrica.';

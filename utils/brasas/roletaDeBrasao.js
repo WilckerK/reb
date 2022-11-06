@@ -26,7 +26,7 @@ try {
 	    }else if(dataAtual.getTime() >= ficha.bras.tempoParaRoletar.getTime()){
 	        dataAtual.setUTCHours(dataAtual.getUTCHours() + 3);
 	        ficha.bras.tempoParaRoletar = dataAtual;
-	        ficha.bras.roletasMax = 4;
+	        ficha.bras.roletasMax = 4 + Math.floor(ficha.torre.nivel / 2);
 	        ficha.bras.roletas = ficha.bras.roletasMax;
 	        ficha.bras.pego = false;
 	    }

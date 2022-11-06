@@ -56,7 +56,7 @@ module.exports = async(client) =>{
 	async function impostos(){
 	    cor();
 	    feli();
-	    torre();
+	    torreEMina();
 	    
 	    async function cor(){
 	        const pegarMembrosComCoresVip = async() =>{
@@ -87,11 +87,17 @@ module.exports = async(client) =>{
 	        
 	    }
 	
-	    async function torre(){
+	    async function torreEMina(){
 	        const userDB = await client.db.collection('users');
-	        const escolhidos = await userDB.find({"$and":[{"torre":{"$exists" : true}},{"torre.nivel":{"$ne": 0}}]}).sort({rewbs: -1}).toArray();
-	        await escolhidos.forEach(async(element) => {
+	        const escolhidosTorre = await userDB.find({"$and":[{"torre":{"$exists" : true}},{"torre.nivel":{"$ne": 0}}]}).sort({rewbs: -1}).toArray();
+	        await escolhidosTorre.forEach(async(element) => {
 	            element.rewbs += element.rewbs * ((5 + (element.torre.nivel - 1)* 3)/100)
+	            await updateUser(client.db, element);
+	        });
+
+			const escolhidosMina = await userDB.find({"$and":[{"mina":{"$exists" : true}},{"mina.bewMinerador":{"$ne": null}}]}).sort({rewbs: -1}).toArray();
+			await escolhidosMina.forEach(async(element) => {
+	            element.mina.carvoes += (element.mina.local * element.mina.picareta * 10); 
 	            await updateUser(client.db, element);
 	        });
 	    }
