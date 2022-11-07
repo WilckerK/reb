@@ -21,7 +21,7 @@ module.exports = class extends comando{
             return
         }
         const taxaRiqueza = (100 - Math.ceil(ficha.rewbs / 500) < 0)?0:100 - Math.ceil(ficha.rewbs / 500); 
-        const valor = 50 + taxaRiqueza + Math.floor(Math.random() * (36 + (ficha.bews.length * 5)));
+        const valor = 50 + (taxaRiqueza * 2) + Math.floor(Math.random() * (36 + (ficha.bews.length * 5)));
 
         ficha.rewbs += valor;
         dataAtual.setUTCHours(dataAtual.getUTCHours() + 20);

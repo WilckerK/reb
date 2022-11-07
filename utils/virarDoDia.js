@@ -11,6 +11,7 @@ module.exports = async(client) =>{
 			await fundos.updateOne({"_id" : "01"}, {$set: {fechamento: dataAtual}}, { upsert: true });
 	        quitanda(fundos)
 	        fecharBolsa(fundos);
+			mercador(fundos);
 	        impostos();
 	        return;
 	    }
@@ -26,18 +27,18 @@ module.exports = async(client) =>{
 	    const channel = await client.channels.fetch('1028704898247823501');
 	    const { MessageEmbed } = require('discord.js');
 	    const msg = new MessageEmbed()
-	    .setTitle('Quitanda do Dia!!!')
-	    .setThumbnail(client.user.displayAvatarURL())
-	    .setColor('RANDOM')
-	    .setDescription('***~Ofertas Imperdíveis~***'+`\n**◇◆ ▬▬▬▬▬▬▬◆◇◆◇▬▬▬▬▬▬▬ ◆◇**\n` + `${comidas[0][0]} ❯ **${comidas[0][3]}** por ${comidas[0][2]} ~ (*${comidas[0][4]}*)`
-	    +`\n**◇◆ ▬▬▬▬▬▬▬◆◇◆◇▬▬▬▬▬▬▬ ◆◇**\n` + `${comidas[1][0]} ❯ **${comidas[1][3]}** por ${comidas[1][2]} ~ (*${comidas[1][4]}*)` +`\n**◇◆ ▬▬▬▬▬▬▬◆◇◆◇▬▬▬▬▬▬▬ ◆◇**\n` + `${comidas[2][0]} ❯ **${comidas[2][3]}** por ${comidas[2][2]} ~ (*${comidas[2][4]}*)` 
-	    +`\n**◇◆ ▬▬▬▬▬▬▬◆◇◆◇▬▬▬▬▬▬▬ ◆◇**\n` + `${comidas[3][0]} ❯ **${comidas[3][3]}** por ${comidas[3][2]} ~ (*${comidas[3][4]}*)` +`\n**◇◆ ▬▬▬▬▬▬▬◆◇◆◇▬▬▬▬▬▬▬ ◆◇**\n`+'\n*Envie o emoji correspondente para comprar a opção desejada.*\n*Compre apenas um tipo de item por vez.*\n*Você pode comprar vários do mesmo item por repetir o emoji.*')
-	    .setFooter({text: 'WK Company', iconURL: 'https://i.imgur.com/B73wyqP.gif'});
+	    	.setTitle('Quitanda do Dia!!!')
+	    	.setThumbnail(client.user.displayAvatarURL())
+	    	.setColor('RANDOM')
+	    	.setDescription('***~Ofertas Imperdíveis~***'+`\n**◇◆ ▬▬▬▬▬▬▬◆◇◆◇▬▬▬▬▬▬▬ ◆◇**\n` + `${comidas[0][0]} ❯ **${comidas[0][3]}** por ${comidas[0][2]} ~ (*${comidas[0][4]}*)`
+	    	+`\n**◇◆ ▬▬▬▬▬▬▬◆◇◆◇▬▬▬▬▬▬▬ ◆◇**\n` + `${comidas[1][0]} ❯ **${comidas[1][3]}** por ${comidas[1][2]} ~ (*${comidas[1][4]}*)` +`\n**◇◆ ▬▬▬▬▬▬▬◆◇◆◇▬▬▬▬▬▬▬ ◆◇**\n` + `${comidas[2][0]} ❯ **${comidas[2][3]}** por ${comidas[2][2]} ~ (*${comidas[2][4]}*)` 
+	    	+`\n**◇◆ ▬▬▬▬▬▬▬◆◇◆◇▬▬▬▬▬▬▬ ◆◇**\n` + `${comidas[3][0]} ❯ **${comidas[3][3]}** por ${comidas[3][2]} ~ (*${comidas[3][4]}*)` +`\n**◇◆ ▬▬▬▬▬▬▬◆◇◆◇▬▬▬▬▬▬▬ ◆◇**\n`+'\n*Envie o emoji correspondente para comprar a opção desejada.*\n*Compre apenas um tipo de item por vez.*\n*Você pode comprar vários do mesmo item por repetir o emoji.*')
+	    	.setFooter({text: 'WK Company', iconURL: 'https://i.imgur.com/B73wyqP.gif'});
 	    await channel.send({content: `<@&1031223545382043709>`, embeds: [msg]});
 	    channel.setName(`『${comidas[0][0]}${comidas[1][0]}${comidas[2][0]}${comidas[3][0]}』quitanda`)
 	}
 	
-	async function fecharBolsa (fundos){
+	async function fecharBolsa(fundos){
 	    const listaDeChannels = require('./listaDeChannels');
 	    listaDeChannels.forEach(async(channel) => {
 	        const channelObjeto = await fundos.findOne({"_id" : channel});
@@ -51,6 +52,10 @@ module.exports = async(client) =>{
 	        const porcentagem = Math.round((valor * 100)/valorAntigo);
 	        await fundos.updateOne({"_id" : channel}, {$set: {valor: valor, valuation: 0, balance: porcentagem}}, { upsert: true });
 	    });
+	}
+
+	async function mercador(fundos){
+
 	}
 	
 	async function impostos(){
