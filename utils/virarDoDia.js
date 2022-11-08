@@ -46,8 +46,8 @@ module.exports = async(client) =>{
 	            {return}
 	
 	        const valorAntigo = channelObjeto.valor || 30;
-	        let valor = channelObjeto.valuation * 10;
-	        valor = Math.round((((valor + valorAntigo)/2) >= 30)? ((valor + valorAntigo)/2) : 30);
+	        let valor = channelObjeto.valuation * 5;
+	        valor = Math.round((((valor + valorAntigo)/2) >= 15)? Math.floor((valor + valorAntigo)/2) : 15);
 	        
 	        const porcentagem = Math.round((valor * 100)/valorAntigo);
 	        await fundos.updateOne({"_id" : channel}, {$set: {valor: valor, valuation: 0, balance: porcentagem}}, { upsert: true });

@@ -84,8 +84,8 @@ module.exports = class extends comando{
                     
                     const bewDB = await interaction.db.collection('bews');
 
-                    await bewDB.updateOne({_id: fichaA.bews[bewDoUserA].bewId}, {$set: {dono: [userA]}});
-                    await bewDB.updateOne({_id: fichaB.bews[bewDoUserB].bewId}, {$set: {dono: [userB]}});
+                    await bewDB.updateOne({_id: fichaA.bews[bewDoUserA].bewId}, {$set: {dono: [userB]}});
+                    await bewDB.updateOne({_id: fichaB.bews[bewDoUserB].bewId}, {$set: {dono: [userA]}});
 
                     await updateUser(interaction.db, fichaA);
                     await updateUser(interaction.db, fichaB);
