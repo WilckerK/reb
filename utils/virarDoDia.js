@@ -57,25 +57,26 @@ module.exports = async(client) =>{
 	async function mercador(fundos){
 		const painel = await fundos.findOne({"_id": "01"});
 		let txtMercador = '';
+		const listaMercadorias = require('./economia/listaMercadorias')
 		for (let i = 0; i < 5; i++) {
 			const nums = ['1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣']
-			painel.mercador.trocas.push([listaMercadorias('conceder'), listaMercadorias('receber'), false])
+			await painel.mercador.trocas.push([listaMercadorias('conceder'), listaMercadorias('receber'), false])
 			const element = painel.mercador.trocas[i];
-			txtMercador = txtMercador + `**◇◆ ▬▬▬▬▬▬▬◆◇◆◇▬▬▬▬▬▬▬ ◆◇**\n**Troca ${nums[i]}:**`
+			txtMercador = txtMercador + `**◇◆ ▬▬▬▬▬▬▬◆◇◆◇▬▬▬▬▬▬▬ ◆◇**\n**Troca ${nums[i]}:** `
 			switch(element[0][1]){
-				case 'Carvão': txtMercador = txtMercador + `**${element[0][1]} Carvões** por `
+				case 'Carvão': txtMercador = txtMercador + `**${element[0][0]} Carvões** por `
 				break;
-				case 'Brasão': txtMercador = txtMercador + `**${element[0][1]} ${element[0][2][4]}[${element[0][2][5]}]** por `
+				case 'Brasão': txtMercador = txtMercador + `**${element[0][0]} ${element[0][2][4]}[${element[0][2][5]}]** por `
 				break;
-				case 'Comida': txtMercador = txtMercador + `**${element[0][1]} ${element[0][2][0]}** por `
+				case 'Comida': txtMercador = txtMercador + `**${element[0][0]} ${element[0][2][0]} ${element[0][2][3]}** por `
 				break;
 			}
 			switch(element[1][1]){
-				case 'Rewbs': txtMercador = txtMercador + `**${element[1][1]} Rewbs**\n`
+				case 'Rewbs': txtMercador = txtMercador + `**${element[1][0]} Rewbs**\n`
 				break;
-				case 'Brasão': txtMercador = txtMercador + `**${element[1][1]} ${element[1][2][4]}[${element[1][2][5]}]**\n`
+				case 'Brasão': txtMercador = txtMercador + `**${element[1][0]} ${element[1][2][4]}[${element[1][2][5]}]**\n`
 				break;
-				case 'Comida': txtMercador = txtMercador + `**${element[0][1]} ${element[0][2][0]}**\n`
+				case 'Comida': txtMercador = txtMercador + `**${element[1][0]} ${element[1][2][0]} ${element[1][2][3]}**\n`
 				break;
 			}
 		}
@@ -86,8 +87,8 @@ module.exports = async(client) =>{
 	    const msg = new MessageEmbed()
 	    	.setTitle('Mercador Insano!!!')
 	    	.setColor('RANDOM')
-	    	.setDescription('**Trocas do dia:\n**' + `${txtMercador}` + `**◇◆ ▬▬▬▬▬▬▬◆◇◆◇▬▬▬▬▬▬▬ ◆◇**`)
-			.setImage('https://cdn.discordapp.com/attachments/1008488078542917712/1041522335108317204/Gold_Forrest_insane_merchant_in_a_black_outfit_and_a_top_hat_3eff162f-173a-4a0b-a9cc-62cdece6e461.png')
+	    	.setDescription('**Trocas do dia:**\n' + `${txtMercador}` + `**◇◆ ▬▬▬▬▬▬▬◆◇◆◇▬▬▬▬▬▬▬ ◆◇**\n*As duas últimas trocas só se tronam disponivéis quando o chat <#${painel.mercador.tranca}> for movimentado.*`)
+            .setImage('https://cdn.discordapp.com/attachments/1008488078542917712/1041522335108317204/Gold_Forrest_insane_merchant_in_a_black_outfit_and_a_top_hat_3eff162f-173a-4a0b-a9cc-62cdece6e461.png')
 	    	.setFooter({text: 'WK Company', iconURL: 'https://i.imgur.com/B73wyqP.gif'});
 		await channel.send({content: `<@&1031223545382043709>`, embeds: [msg]});
 	}
