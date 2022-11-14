@@ -53,7 +53,6 @@ module.exports = class extends comando{
         const presente = [].concat(fichaA.geladeira[indexDoItem]);
 
         const fichaB = await checkUser(interaction.db, userB);
-
         let jaTem = -1;
         for (let i = 0; i < fichaB.geladeira.length; i++) {
             const element = fichaB.geladeira[i];
@@ -62,11 +61,8 @@ module.exports = class extends comando{
                 break;       
             }
         }
-        if(jaTem != -1){
-            fichaB.geladeira[jaTem][5] += 1;
-        }else{
-            presente[5] = 1;
-            await fichaB.geladeira.push(presente);
+        if(jaTem != -1){fichaB.geladeira[jaTem][5] += 1;
+        }else{presente[5] = 1;await fichaB.geladeira.push(presente);
         }
 
         fichaA.geladeira[indexDoItem][5] = (fichaA.geladeira[indexDoItem][5] - 1);

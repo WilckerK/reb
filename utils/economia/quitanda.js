@@ -26,7 +26,7 @@ try{
         return element[0] == emojis[0]
     });
     if(!painelComidas){
-        await message.channelId.send({content: "Essa opção não está a venda. Tente escolher uma das disponíveis."});
+        await message.channel.send({content: "Essa opção não está a venda. Tente escolher uma das disponíveis."});
         return
     }
 

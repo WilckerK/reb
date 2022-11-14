@@ -61,22 +61,39 @@ module.exports = async(client) =>{
 		for (let i = 0; i < 5; i++) {
 			const nums = ['1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣']
 			await painel.mercador.trocas.push([listaMercadorias('conceder'), listaMercadorias('receber'), false])
+			if(i == 3 || i == 4){
+				switch(painel.mercador.trocas[i][1][1]){
+					case 'Rewbs': painel.mercador.trocas[i][1][0] += Math.ceil(Math.random() * 3) * 500 
+					break;
+					case 'Brasão':  painel.mercador.trocas[i][1][0] += Math.ceil(Math.random() * 3)
+					break;
+					case 'Comida':  painel.mercador.trocas[i][1][0] += Math.ceil(Math.random() * 3) + 1
+					break;
+					case 'Fundo':  painel.mercador.trocas[i][1][0] += Math.ceil(Math.random() * 2)
+					break;
+				}
+				console.log(painel.mercador.trocas[i][1])
+			}
 			const element = painel.mercador.trocas[i];
 			txtMercador = txtMercador + `**◇◆ ▬▬▬▬▬▬▬◆◇◆◇▬▬▬▬▬▬▬ ◆◇**\n**Troca ${nums[i]}:** `
 			switch(element[0][1]){
-				case 'Carvão': txtMercador = txtMercador + `**${element[0][0]} Carvões** por `
+				case 'Carvão': txtMercador = txtMercador + `**${element[0][0]} ${element[0][1]}** por `
 				break;
 				case 'Brasão': txtMercador = txtMercador + `**${element[0][0]} ${element[0][2][4]}[${element[0][2][5]}]** por `
 				break;
 				case 'Comida': txtMercador = txtMercador + `**${element[0][0]} ${element[0][2][0]} ${element[0][2][3]}** por `
 				break;
+				case 'Fundo': txtMercador = txtMercador + `**${element[0][0]} ${element[0][2]}** por `
+				break;
 			}
 			switch(element[1][1]){
-				case 'Rewbs': txtMercador = txtMercador + `**${element[1][0]} Rewbs**\n`
+				case 'Rewbs': txtMercador = txtMercador + `**${element[1][0]} ${element[1][1]}**\n`
 				break;
 				case 'Brasão': txtMercador = txtMercador + `**${element[1][0]} ${element[1][2][4]}[${element[1][2][5]}]**\n`
 				break;
 				case 'Comida': txtMercador = txtMercador + `**${element[1][0]} ${element[1][2][0]} ${element[1][2][3]}**\n`
+				break;
+				case 'Fundo': txtMercador = txtMercador + `**${element[1][0]} ${element[1][2]}**\n`
 				break;
 			}
 		}

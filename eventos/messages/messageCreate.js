@@ -52,7 +52,7 @@ module.exports = class extends Evento {
                 const rbw = await this.client.guilds.cache.get('732276333429784707');
                 if(await rbw.channels.cache.get('1028819143992025099').name != '『📕』missão'){
                     const missoes = require('../../utils/bews/editar/missoes');
-                    //await missoes(this.client);
+                    await missoes(this.client);
                 }
             }
 
@@ -82,6 +82,14 @@ module.exports = class extends Evento {
                 'áéíóúàèìòùãõâêîôû.,;:/?][<)(1234567890!@#$%&*-_+="\\|abcdefghijklmnopqrstuvwxyz'.indexOf(message.content[0].toLowerCase()) == -1){
                 const quitanda = require('../../utils/economia/quitanda');
                 await quitanda(message.author.id, this.client, message).catch((err) => {console.log(err)});
+                return
+            }
+
+            //mercador
+            if(message.channelId == '1038861867310923867' &&
+            'áéíóúàèìòùãõâêîôû.,;:/?][<)(67890!@#$%&*-_+="\\|abcdefghijklmnopqrstuvwxyz'.indexOf(message.content[0].toLowerCase()) == -1){
+                const mercador = require('../../utils/economia/mercador');
+                await mercador(this.client, message).catch((err) => {console.log(err)});
                 return
             }
 
