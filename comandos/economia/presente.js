@@ -34,13 +34,13 @@ module.exports = class extends comando{
             return
         }
 
-        const item = interaction.options.getString('item');
+        const item = interaction.options.getString('item').toLowerCase();
         const fichaA = await checkUser(interaction.db, userA);
 
         let indexDoItem = -1;
         for (let i = 0; i < fichaA.geladeira.length; i++) {
             const element = fichaA.geladeira[i];
-            if(element[3].toLowerCase() == item.toLowerCase()){
+            if(element[3].toLowerCase() == item){
                 indexDoItem = i;
                 break;       
             }
@@ -57,13 +57,13 @@ module.exports = class extends comando{
         let jaTem = -1;
         for (let i = 0; i < fichaB.geladeira.length; i++) {
             const element = fichaB.geladeira[i];
-            if(element[3] == item){
+            if(element[3].toLowerCase() == item){
                 jaTem = i;
                 break;       
             }
         }
         if(jaTem != -1){
-            fichaB.geladeira[jaTem][5] = fichaB.geladeira[jaTem][5] + 1;
+            fichaB.geladeira[jaTem][5] += 1;
         }else{
             presente[5] = 1;
             await fichaB.geladeira.push(presente);
