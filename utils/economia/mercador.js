@@ -59,7 +59,7 @@ module.exports = async(client, message) =>{
             ficha.geladeira.find(e => {return e[0] == mercadoria[0][2][0]})[5] -= mercadoria[0][0];
         break;
         case 'Fundo':
-            if(mercadoria[0][0] > ficha.fundos.find(e =>{return nome === mercadoria[0][2]}).qtd){
+            if(mercadoria[0][0] > ficha.fundos.find(e =>{return e.nome === mercadoria[0][2]}).qtd){
                 await message.reply({content: 'Você não tem o item ou a quantidade para realizar a troca.'}); 
                 return
             }

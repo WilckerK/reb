@@ -84,8 +84,8 @@ module.exports = class extends comando{
                     const bewDB = await interaction.db.collection('bews');
                     let bew = await bewDB.findOne({"_id": element.bewId});
                     if(bew.felicidade <= 35){            
-                        interaction.reply({content: 'Seus bews estão muito famintos, para poderem ir atacar uma torre.', ephemeral: true})
-                        collector.stop('time') //Time pq ai ele só retorna, gambiarra :) 
+                        enviada.edit({content: 'Seus bews estão muito famintos, para poderem ir atacar uma torre.', ephemeral: true})
+                        collector.stop('time') //Time pq ai ele só retorna, gambiarra :) (A gambiarra n deu certi :( ) (Deu certo sim, eu que morgue :D )
                         return
                     }
                     bew.felicidade -= 10

@@ -56,7 +56,7 @@ module.exports = class extends Evento {
                 const rbw = await this.client.guilds.cache.get('732276333429784707');
                 if(await rbw.channels.cache.get('1028819143992025099').name != '『📕』missão'){
                     const missoes = require('../../utils/bews/editar/missoes');
-                    await missoes(this.client);
+                    //await missoes(this.client);
                 }
             }
 

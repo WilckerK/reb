@@ -2,12 +2,13 @@ const comando = require('../../estrutura/Comando');
 const gostoDosGeneros = require('../../utils/bews/gostoDosGeneros');
 const checkUser = require('../../utils/checkUser');
 const updateUser = require('../../utils/updateUser');
+const {MessageEmbed} = require('discord.js');
 
 module.exports = class extends comando{
     constructor(client){
         super(client, {
             nome: 'alimentar' ,
-            desc: 'Alimenta um dos seus bews.',
+            desc: 'Alimenta seus bews.',
             options: [
                 {
                     name: 'nome',
@@ -19,6 +20,8 @@ module.exports = class extends comando{
             requireDatabase: true
         })
     }
+    set saciez(int){this._saciez = Math.floor(int / 2) + 5}
+    get saciez() {return this._saciez}
 
     run = async(interaction) => {
         const ficha = await checkUser(interaction.db, interaction.member.id);
@@ -32,6 +35,7 @@ module.exports = class extends comando{
             return currObj.nome.toLowerCase() === interaction.options.getString('nome').toLowerCase()
         });
         if(!bewDoUser){
+            if(interaction.options.getString('nome').toLowerCase() == 'todos'){this.todos(interaction, ficha); return}
             interaction.reply({content: 'Você não tem nenhum bew com esse nome.', ephemeral: true});
             return
         }
@@ -41,30 +45,14 @@ module.exports = class extends comando{
         
         let colora = ''
         switch(bew.bras[0][0]){
-            case 'A': //Preto
-                colora = '0x000000'
-                break;
-            case 'B': //Branco
-                colora = '0xFFFFFF'
-                break;
-            case 'C'://Vermelho
-                colora = 'RED'
-                break;
-            case 'D'://Amarelo
-                colora = 'YELLOW'
-                break;
-            case 'E'://Verde
-                colora = 'GREEN'
-                break;
-            case 'F'://Ciano
-                colora = 'AQUA'
-                break;
-            case 'G'://Azul
-                colora = 'DARKBLUE'
-                break;
-            case 'H'://Lilás
-                colora = 'PURPLE'
-                break;
+            case 'A':colora = '0x000000';break;
+            case 'B':colora = '0xFFFFFF';break;
+            case 'C':colora = 'RED';break;
+            case 'D':colora = 'YELLOW';break;
+            case 'E':colora = 'GREEN';break;
+            case 'F':colora = 'AQUA';break;
+            case 'G':colora = 'DARKBLUE';break;
+            case 'H':colora = 'PURPLE';break;
         }
 
         let emEstoque = []
@@ -101,8 +89,6 @@ module.exports = class extends comando{
                 (bew.felicidade >= 25)?`Está com fome.`:
                 (bew.felicidade >= 10)?`Está com muita fome.`:
                 `Já está quase decido a ir embora.`;
-            
-            const {MessageEmbed} = require('discord.js');
             let msg = new MessageEmbed()
                 .setTitle('Alimente seu Bew!')
                 .setColor(colora)
@@ -113,7 +99,7 @@ module.exports = class extends comando{
                 .setFooter({text: bew._id});
             const enviada = await interaction.reply({embeds: [msg], fetchReply: true});
             try{
-                const limite = (aceitaveis.length > 6)?6:aceitaveis.length;
+                const limite = (aceitaveis.length > 5)?5:aceitaveis.length;
                 for (let i = 0; i < limite; i++) {
                     await enviada.react(aceitaveis[i][0]);
                 }
@@ -133,13 +119,11 @@ module.exports = class extends comando{
                 }
             }
 
-            const saciez = Math.floor(emEstoque[indexDaReacao][2] / 2) + 5;
+            this.saciez = emEstoque[indexDaReacao][2];
+            bew.felicidade = (bew.felicidade + this.saciez > 100)?100:bew.felicidade + this.saciez;
 
-            bew.felicidade = (bew.felicidade + saciez > 100)?100:bew.felicidade + saciez;
             emEstoque[indexDaReacao][5]--;
-            if(emEstoque[indexDaReacao][5] < 1){
-                emEstoque.splice(indexDaReacao, 1);
-            }
+            if(emEstoque[indexDaReacao][5] < 1){emEstoque.splice(indexDaReacao, 1);}
             const fulano = await checkUser(interaction.db, interaction.member.id);
             fulano.geladeira = emEstoque;
             await updateUser(interaction.db, fulano);
@@ -165,5 +149,66 @@ module.exports = class extends comando{
             enviada.reactions.removeAll().catch(() => {});
         })
         }catch(err){}
+    }
+
+    todos = async(interaction, ficha) => {
+        let txtAlimentados = '';
+        const bewDB = await interaction.db.collection('bews');
+        const limite = (ficha.bews.length > 15)?15:ficha.bews.length - 1;
+        let colora, link = (ficha.bews.length > 4)?Math.ceil(Math.random() * 4):Math.ceil(Math.random() * ficha.bews.length);
+        for (let i = 1; i < limite; i++) {
+            const element = ficha.bews[i];
+            const bew = await bewDB.findOne({"_id": element.bewId});
+            if(link == i){link = bew.link; colora = bew.bras[0][0]}
+            if(bew.felicidade === 100){
+                txtAlimentados = txtAlimentados + `~[${bew.felicidade}] | **${bew.nome} já está cheio**, não comeu nada.\n`
+                continue;
+            }
+            if(ficha.geladeira.length == 0){
+                txtAlimentados = txtAlimentados + `~[${bew.felicidade}] | **${bew.nome} não se alimentou**, compre comida.\n`
+                continue;
+            }
+            const gosto = Array.from(gostoDosGeneros[bew.raca[3]])
+            let comidaIndex = await ficha.geladeira.findIndex(element => {return gosto.findIndex(e => e == element[1][0]) != -1})
+            if(comidaIndex == -1){
+                try{
+                    comidaIndex = ficha.geladeira.findIndex(element => {return gosto.findIndex(e => e == element[1][1]) != -1})
+                }
+                catch(err){}
+            }
+            if(comidaIndex == -1){
+                txtAlimentados = txtAlimentados + `~[${bew.felicidade}] | **${bew.nome} não se alimentou**, compre comida.\n`
+                continue;
+            }
+            ficha.geladeira[comidaIndex][5]--;
+            const comida = ficha.geladeira[comidaIndex];
+            this.saciez = ficha.geladeira[comidaIndex][2]
+            if(ficha.geladeira[comidaIndex][5] == 0){ficha.geladeira.splice(comidaIndex, 1);}
+            bew.felicidade = (bew.felicidade + this.saciez > 100)?100: bew.felicidade + this.saciez;
+            await bewDB.updateOne({"_id": bew._id}, {$set: {"felicidade": bew.felicidade}})
+            txtAlimentados = txtAlimentados + `~[${bew.felicidade}] | **${bew.nome}** alimentado, **${comida[0]} ${comida[3]}**.\n`
+        }
+
+        await updateUser(interaction.db,ficha)
+
+        switch(colora){
+            case 'A':colora = '0x000000';break;
+            case 'B':colora = '0xFFFFFF';break;
+            case 'C':colora = 'RED';break;
+            case 'D':colora = 'YELLOW';break;
+            case 'E':colora = 'GREEN';break;
+            case 'F':colora = 'AQUA';break;
+            case 'G':colora = 'DARKBLUE';break;
+            case 'H':colora = 'PURPLE';break;
+        }
+
+        let msg = new MessageEmbed()
+            .setTitle('Bews alimentados!')
+            .setColor(colora)
+            .setImage(link)
+            .setDescription(`*Os Bews se recusam a comer comidas que não gostam ou que não podem comer.*\n**◇◆ ▬▬▬▬▬▬◆◇◆◇▬▬▬▬▬▬ ◆◇**\n${txtAlimentados}**◇◆ ▬▬▬▬▬▬◆◇◆◇▬▬▬▬▬▬ ◆◇**`)
+            .setFooter({text: 'WK Company', iconURL: 'https://i.imgur.com/B73wyqP.gif'})
+            .setTimestamp()
+        return interaction.reply({embeds: [msg]});
     }
 }
