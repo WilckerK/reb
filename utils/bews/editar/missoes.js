@@ -1,4 +1,6 @@
 module.exports = async(client) =>{
+    const channel = await client.channels.fetch('1028819143992025099');
+    await channel.setName('『📕』missão');
     const nomesNPCs = ['Guarda','Fazendeiro','Clérigo','Mandraka','Crimson','Slay','Opal','O Chefe']
 
     let npcEscolhido = ''; let local = ''
@@ -45,9 +47,6 @@ module.exports = async(client) =>{
     if(requisitos.atq > 0){requisitos.txt = requisitos.txt + ` // ATQ: **${requisitos.atq}**`;}
     if(requisitos.res > 0){requisitos.txt = requisitos.txt + ` // RES: **${requisitos.res}**`;}
     const custo = Math.ceil(requisitos.rank / 2) * 15;
-    
-    const channel = await client.channels.fetch('1028819143992025099');
-    await channel.setName('『📕』missão');
     const {MessageEmbed} = require('discord.js');
     let msg = new MessageEmbed()
         .setTitle(npcEscolhido)

@@ -1,6 +1,7 @@
 const comando = require('../../estrutura/Comando');
 const checkUser = require('../../utils/checkUser');
 const updateUser = require('../../utils/updateUser');
+const {MessageEmbed} = require('discord.js');
 
 module.exports = class extends comando{
     constructor(client){
@@ -21,8 +22,9 @@ module.exports = class extends comando{
 
     run = async(interaction) => {
         const ficha = await checkUser(interaction.db, interaction.member.id);
-        const nomeDoBew =  interaction.options.getString('nome').toLowerCase()
-        if(ficha.mina.bew == null){
+        let bewDoUser;
+        if(ficha.mina.bewMinerador == null){
+            const nomeDoBew =  interaction.options.getString('nome')
             if (!nomeDoBew){
                 interaction.reply({content: 'Escreva o nome do bew que deseja deixar mineirando.', ephemeral: true});
                 return
@@ -31,9 +33,9 @@ module.exports = class extends comando{
                 interaction.reply({content: 'Você não pode colocar o seu único bew.', ephemeral: true});
                 return
             }
-            let bewDoUser = ficha.bews.find((currObj) => {
+            bewDoUser = ficha.bews.find((currObj) => {
                 if(currObj > 0){return}
-                return currObj.nome.toLowerCase() === nomeDoBew
+                return currObj.nome.toLowerCase() === nomeDoBew.toLowerCase()
             });
 
             if(!bewDoUser){
@@ -41,7 +43,7 @@ module.exports = class extends comando{
                 return
             }
 
-            ficha.mina.bew = bewDoUser;
+            ficha.mina.bewMinerador = bewDoUser;
             const indexDoBew = Array.from(ficha.bews).indexOf(bewDoUser);
             ficha.bews.splice(indexDoBew, 1);
             ficha.bews[0]--;
@@ -51,15 +53,17 @@ module.exports = class extends comando{
                 .setTitle('Bew minerador')
                 .setColor(0x101010)
                 .setDescription('**◇◆ ▬▬▬▬▬▬◆◇◆◇▬▬▬▬▬▬ ◆◇**\n' + 
-                `**${bew.nome}** foi enviado para a mineradora.` + '\n**◇◆ ▬▬▬▬▬▬◆◇◆◇▬▬▬▬▬▬ ◆◇**\n' + 
+                `**${bewDoUser.nome}** foi enviado para a mineradora.` + '\n**◇◆ ▬▬▬▬▬▬◆◇◆◇▬▬▬▬▬▬ ◆◇**\n' + 
                 `*Lembre-se sempre de checar a felicidade dele.*`)
                 .setTimestamp();
             await interaction.reply({embeds:[msg]})
             return
+        }else{
+            bewDoUser = ficha.mina.bewMinerador;
         }
         
         const bewDB = await interaction.db.collection('bews');
-        let bew = await bewDB.findOne({"_id": ficha.mina.bew.bewId});
+        let bew = await bewDB.findOne({"_id": ficha.mina.bewMinerador.bewId});
         
         let colora = ''
         switch(bew.bras[0][0]){
@@ -86,8 +90,6 @@ module.exports = class extends comando{
         let brasDoBew = brasData('get',bew.bras[1],bew.bras[2]);
         let habsDoBew = (bew.habs[0] != 0)?habsData('getNome', bew.habs):'Sem habilidades';
         let equipDoBew = (!bew.equip)?`${bew.nome} não carrega um equipamento.`:'';
-        
-        const {MessageEmbed} = require('discord.js');
         let msg = new MessageEmbed()
             .setTitle(bew.nome + ' - ' + bew.raca[2])
             .setColor(colora)
@@ -100,7 +102,7 @@ module.exports = class extends comando{
                 {name: 'Genero:', value: '~ '+ bew.raca[3] + ` - (${bew.raca[1]})`, inline: true},
                 //{name: 'Equipamento:', value:'~ '+ equipDoBew, inline: false},
                 //{name: 'Habilidades:', value: `~ ${habsDoBew.join(', ')}`, inline: true},
-                {name: 'Status:', value: `**ATQ: **__${bew.status.ATQ}__ // **VEL: **__${bew.status.VEL}__ // **ACE: **__${bew.status.ACE}__ // **RES: **__${bew.status.RES}__\nPara retirar seu bew da mineradora aperte o emoji 🛏`}
+                {name: 'Status:', value: `**ATQ: **__${bew.status.ATQ}__ // **VEL: **__${bew.status.VEL}__ // **ACE: **__${bew.status.ACE}__ // **RES: **__${bew.status.RES}__\nPra retirar o bew da mineradora aperte o emoji 🛏`}
             )
             .setImage(bew.link)
             .setFooter({text: bew._id});
@@ -122,13 +124,21 @@ module.exports = class extends comando{
 
         collector.on('collect', async(reaction) => {
             const fulano = await checkUser(interaction.db, ficha._id);
-            fulano.mina.bew = null;
+            fulano.mina.bewMinerador = null;
             fulano.bews[0]++;
             fulano.bews.splice(1, 0, bewDoUser);
-            await updateUser(interaction.db, fulano._id);
+            await updateUser(interaction.db, fulano);
             collector.stop();
         })
         collector.on('end', async() => {
+            msg = new MessageEmbed()
+                .setTitle('Bew minerador')
+                .setColor(0x101010)
+                .setDescription('**◇◆ ▬▬▬▬▬▬◆◇◆◇▬▬▬▬▬▬ ◆◇**\n' + 
+                `**${bew.nome}** foi retirado da mineradora.` + '\n**◇◆ ▬▬▬▬▬▬◆◇◆◇▬▬▬▬▬▬ ◆◇**\n' + 
+                `*Lembre-se sempre de checar a felicidade dele.*`)
+                .setTimestamp();
+            await message.edit({embeds:[msg]})
             message.reactions.removeAll().catch(() => {});
         })
     }

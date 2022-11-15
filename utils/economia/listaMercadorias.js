@@ -8,7 +8,7 @@ module.exports = (acao) =>{
     if(acao == 'conceder'){
         switch (random) {
             case 1: //carvão
-                retorno.push(Math.ceil(Math.random() * 7) * 200);
+                retorno.push(Math.ceil(Math.random() * 7) * 500);
                 retorno.push('Carvão')
             break;
             case 2: //Brasão
@@ -46,6 +46,7 @@ module.exports = (acao) =>{
                 retorno.push('Comida')
                 retorno.push(listaDeComidas[Math.floor(Math.random() * listaDeComidas.length)])
             break;
+            
             case 4: //Fundos
                 retorno.push(Math.ceil(Math.random() * 3) + 2)
                 retorno.push('Fundo')

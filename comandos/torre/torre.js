@@ -67,10 +67,7 @@ _ _   _|_   _ _
             .setTimestamp()
         const enviada  = await interaction.reply({embeds:[msg], fetchReply: true});
 
-        if(interaction.member.user != user)
-            {return}
-
-        if(ficha.rewbs < 2000 + (ficha.torre.nivel * 4000))
+        if(interaction.member.user != user || ficha.rewbs < 2000 + (ficha.torre.nivel * 4000))
             {return}
 
         for (let i = 0; i < ficha.torre.brasoesNecessarios.length; i++) {

@@ -12,9 +12,9 @@ module.exports = (acao, num) =>{
     if(acao == 'picareta'){
         const picaretas = [
             ['Ferro ⚙', 5],
-            ['Ouro 🥇', 15],
-            ['Diamante 💎', 30],
-            ['Brasas 🔥', 80]
+            ['Ouro 🥇', 10],
+            ['Diamante 💎', 20],
+            ['Brasas 🔥', 50]
         ]
 
         return picaretas[num - 1]

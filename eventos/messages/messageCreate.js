@@ -14,6 +14,10 @@ module.exports = class extends Evento {
             if(message.author.bot)
                 {return}
             //Só de meme =====================================================
+            if(message.content.toLowerCase() == '<@753285621514240080>'){
+                await message.channel.send({content: '<@753285621514240080>' });
+                return
+            }
             if(message.content.toLowerCase() == "hype <:rbw_hype:800827734414327828>"){
                 const {MessageEmbed} = require('discord.js');
                 let msg = new MessageEmbed()

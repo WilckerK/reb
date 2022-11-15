@@ -61,13 +61,11 @@ module.exports = class extends comando{
             .setColor(0x700000)
             .setDescription(`**◇◆ ▬▬▬▬▬▬▬◆◇◆◇▬▬▬▬▬▬▬ ◆◇**\nNivel da torre: ${fichaB.torre.nivel}` + `\n**◇◆ ▬▬▬▬▬▬▬◆◇◆◇▬▬▬▬▬▬▬ ◆◇**\n` + 
             `O ataque leva em consideração os seus 4 primeiros bews. \n*(Você pode mudar a ordem com o comando /posicao)*` + `\n**◇◆ ▬▬▬▬▬▬▬◆◇◆◇▬▬▬▬▬▬▬ ◆◇**\n` + 
-            `${frase}\nQuanto maior o nivel, mais difícil é de vencer.\n**◇◆ ▬▬▬▬▬▬▬◆◇◆◇▬▬▬▬▬▬▬ ◆◇**\nO custo do ataque é **${fichaB.torre.nivel * 200}** Rewbs`)
+            `${frase}\nQuanto maior o nivel, mais difícil é de vencer.\n**◇◆ ▬▬▬▬▬▬▬◆◇◆◇▬▬▬▬▬▬▬ ◆◇**\nO custo do ataque é **${fichaB.torre.nivel * 500}** Rewbs`)
             .setFooter({text: 'WK Company', iconURL: 'https://i.imgur.com/B73wyqP.gif'});
             const enviada  = await interaction.reply({embeds:[msg], fetchReply: true});
 
-        if(fichaA.rewbs < fichaB.torre.nivel * 200)
-            {return}
-        if(fichaA.bews.length < 2)
+        if(fichaA.rewbs < fichaB.torre.nivel * 500 || fichaA.bews.length < 2)
             {return}
             
         await enviada.react('⚔');
@@ -97,7 +95,7 @@ module.exports = class extends comando{
             }
 
             mediaRank = Math.round(mediaRank/4);
-            if(Math.ceil(Math.random() * (10 + fichaB.torre.nivel * 2)) <= mediaRank){
+            if(Math.ceil(Math.random() * (14 + fichaB.torre.nivel * 2)) <= mediaRank){
                 collector.stop('Venceu')
             }else{
                 collector.stop('Perdeu')
@@ -107,7 +105,7 @@ module.exports = class extends comando{
             enviada.reactions.removeAll().catch(() => {});
             if(reason === 'time')
                 {return}
-            fichaA.rewbs -= fichaB.torre.nivel * 200;
+            fichaA.rewbs -= fichaB.torre.nivel * 500;
             dataAtual.setUTCHours(dataAtual.getUTCHours() + 2);
             fichaA.torre.tempoDeAtaque = dataAtual;
             if(reason === 'Venceu'){

@@ -23,7 +23,7 @@ module.exports = class extends comando{
         let txt = ``; var inicio = 0; var fim = 7;
         for (let i = inicio; i <= fim; i++) {
             const element = listaDeBrasas[i];
-            if(ficha.bras.brasas.indexOf(element[1]) != -1){txt = txt + '🔥'}
+            if(ficha.bras.brasas.indexOf(element[2]) != -1){txt = txt + '🔥'}
             txt = txt + `**${element[1]}** ~> \`${element[0].join(', ')}\` ~> ***\"${element[2]}\"***\n`;
         }
         let msg = new MessageEmbed()
@@ -61,7 +61,7 @@ module.exports = class extends comando{
 
                 for (let i = inicio; i <= fim; i++) {
                     const element = listaDeBrasas[i];
-                    if(ficha.bras.brasas.indexOf(element[1]) != -1){txt = txt + '🔥'}
+                    if(ficha.bras.brasas.indexOf(element[2]) != -1){txt = txt + '🔥'}
                     txt = txt + `**${element[1]}** ~> \`${element[0].join(', ')}\` ~> ***\"${element[2]}\"***\n`;
                 }
                 

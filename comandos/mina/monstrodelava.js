@@ -1,3 +1,4 @@
+const { MessageEmbed } = require('discord.js');
 const comando = require('../../estrutura/Comando');
 const checkUser = require('../../utils/checkUser');
 const updateUser = require('../../utils/updateUser');
@@ -29,26 +30,27 @@ module.exports = class extends comando{
         }
 
         const porcentagem = Math.ceil(Math.random() * 100);
+        if(quantidade >= 500){porcentagem += 20}
         let txt = ''
         if(porcentagem <= 50){
             ficha.mina.carvoes += Math.floor(quantidade / 2);
-            txt = 'O monstro te devolveu tudo o que ofereceu mais metade.' + 
-            `\nVocê ganhou ${Math.floor(quantidade / 2)} carvões.`
+            txt = 'O monstro devolveu o que ofereceu mais metade.' + 
+            `\nVocê ganhou **${Math.floor(quantidade / 2)} carvões**.`
         }else if(porcentagem <= 60){
             ficha.mina.carvoes += quantidade;
             txt = 'O monstro te devolveu o dobro do que ofereceu.' + 
-            `\nVocê ganhou ${quantidade} carvões.`
+            `\nVocê ganhou **${quantidade} carvões**.`
         }else if(porcentagem <= 80){
             txt = 'O monstro só te devolveu o que ofereceu.' + 
             `\nEle não se interessou pela oferta de carvões.`
-        }else if(porcentagem <= 100){
+        }else{
             ficha.mina.carvoes -= quantidade;
-            txt = 'O monstro só levou tudo o que ofereceu.' + 
-            `\nVocê perdeu os ${quantidade} carvões.`
+            txt = 'O monstro levou tudo o que ofereceu.' + 
+            `\nVocê perdeu os **${quantidade} carvões**.`
         }
         
         await updateUser(interaction.db, ficha, interaction.channel);
-        txt = txt + '**◇◆ ▬▬▬▬▬▬▬◆◇◆◇▬▬▬▬▬▬▬ ◆◇**\n'
+        txt = txt + '\n**◇◆ ▬▬▬▬▬▬▬◆◇◆◇▬▬▬▬▬▬▬ ◆◇**\n'
         switch(Math.floor(Math.random() * (6 - 1) + 1)){
             case 1:txt = txt + '*Espero que seu dinheiro se multiplique muito.*';
                 break;
@@ -62,7 +64,7 @@ module.exports = class extends comando{
                 break;
         }
         const msg = new MessageEmbed()
-            .setTitle('Carvões vendidos!')
+            .setTitle('Monstro de Lava!')
             .setColor(0x700000)
             .setDescription(`**◇◆ ▬▬▬▬▬▬▬◆◇◆◇▬▬▬▬▬▬▬ ◆◇**\n${txt}`)
             .setImage('https://cdn.discordapp.com/attachments/1008488078542917712/1038902779948826734/Gold_Forrest_fire_monster_0cc65c60-540b-4df1-a510-8b3c1126b70d.png')

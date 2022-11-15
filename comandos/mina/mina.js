@@ -43,9 +43,9 @@ module.exports = class extends comando{
 
         const rowButton = new MessageActionRow().addComponents([new MessageButton().setStyle('DANGER').setLabel('Minerar ⛏').setCustomId('Minerar')]);
 
-        if(3000 + (ficha.mina.local * 2000) <= ficha.rewbs && 750 * ficha.mina.local <= ficha.mina.carvoes){
+        if(3000 + (ficha.mina.local * 2000) <= ficha.rewbs && 750 * ficha.mina.local <= ficha.mina.carvoes && ficha.mina.local < 4){
             rowButton.addComponents([new MessageButton().setStyle('SECONDARY').setLabel('Próximo Local').setCustomId('Local')]);
-        }if(ficha.mina.picareta * 1000 <= ficha.mina.carvoes){
+        }if(ficha.mina.picareta * 1000 <= ficha.mina.carvoes && ficha.mina.picareta < 4){
             if(ficha.mina.picareta == 3){
                 const listaDeBrasas = require('../../utils/brasas/listaDeBrasas');
                 if(ficha.bras.brasas.length == listaDeBrasas.length){
@@ -85,7 +85,7 @@ module.exports = class extends comando{
                     }, local[1]);
                 break;
                 case'Local':
-                    ficha.rewbs -= 2000 + (ficha.mina.local * 2000);
+                    ficha.rewbs -= 3000 + (ficha.mina.local * 2000);
                     ficha.mina.carvoes -= 750 * ficha.mina.local;
                     ficha.mina.local++;
                     const novoLocal = listaMinasPicaretas('local', ficha.mina.local);
@@ -107,6 +107,9 @@ module.exports = class extends comando{
                     ficha.mina.carvoes -= ficha.mina.picareta * 1000;
                     ficha.mina.picareta++;
                     const novaPicareta = listaMinasPicaretas('picareta', ficha.mina.picareta);
+                    if(ficha.mina.picareta){
+                        ficha.bras.brasas = []
+                    }
 
                     await updateUser(interaction.db, ficha);
                     msg = new MessageEmbed()
@@ -175,6 +178,9 @@ module.exports = class extends comando{
                 picareta: 1,
                 bewMinerador: null
             }
+        
+            const local = listaMinasPicaretas('local', ficha.mina.local);
+            const picareta = listaMinasPicaretas('picareta', ficha.mina.picareta)
             await updateUser(interaction.db, ficha);
             msg = new MessageEmbed()
                 .setTitle('Mina de Carvão')
@@ -182,10 +188,11 @@ module.exports = class extends comando{
                 .setDescription(`**◇◆ ▬▬▬▬▬▬◆◇◆◇▬▬▬▬▬▬ ◆◇**\n**Carvões:** ${ficha.mina.carvoes} // **Picareta:** ${picareta[0]} \n**Local: ${local[0]}**`+
                 `\n**◇◆ ▬▬▬▬▬▬◆◇◆◇▬▬▬▬▬▬ ◆◇**\nPara começar a minerar mande o comando novamente.` + '\n**◇◆ ▬▬▬▬▬▬◆◇◆◇▬▬▬▬▬▬ ◆◇**\n' +
                 `Próximo local: **${3000 + (ficha.mina.local * 2000)} Rewbs** e **${750 * ficha.mina.local} Carvões**` +
-                `\nPróxima picareta: **${ficha.mina.picareta * 1000} Carvões**${precisaDeBrasas}`)
+                `\nPróxima picareta: **${ficha.mina.picareta * 1000} Carvões**`)
                 .setImage(local[2])
                 .setFooter({text: 'WK Company', iconURL: 'https://i.imgur.com/B73wyqP.gif'})
                 .setTimestamp()
+            await enviada.edit({embeds: [msg]})
             collector.stop();
         })
         collector.on('end', async() => {

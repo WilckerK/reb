@@ -1,3 +1,4 @@
+const { MessageEmbed } = require('discord.js');
 const comando = require('../../estrutura/Comando');
 const checkUser = require('../../utils/checkUser');
 const updateUser = require('../../utils/updateUser');
@@ -27,7 +28,7 @@ module.exports = class extends comando{
             .setTitle('Fábrica')
             .setColor(0x700000)
             .setDescription(`**◇◆ ▬▬▬▬▬▬◆◇◆◇▬▬▬▬▬▬ ◆◇**\nAqui é o local onde se vende os carvões obtidos com o comando /mina.\n` +
-                `${txtFrase}\n**◇◆ ▬▬▬▬▬▬◆◇◆◇▬▬▬▬▬▬ ◆◇**\nA fábrica irá te pagar ${preco} por carvão.\n**◇◆ ▬▬▬▬▬▬◆◇◆◇▬▬▬▬▬▬ ◆◇**\n`)
+                `${txtFrase}\n**◇◆ ▬▬▬▬▬▬◆◇◆◇▬▬▬▬▬▬ ◆◇**\nA fábrica irá te pagar **${preco}** por carvão.\n**◇◆ ▬▬▬▬▬▬◆◇◆◇▬▬▬▬▬▬ ◆◇**\n`)
             .setImage('https://cdn.discordapp.com/attachments/1008488078542917712/1038119160976253018/fabrica.png')
             .setFooter({text: 'WK Company', iconURL: 'https://i.imgur.com/B73wyqP.gif'})
             .setTimestamp()
@@ -37,8 +38,9 @@ module.exports = class extends comando{
     run = async(interaction) => {
         const quantidade = interaction.options.getInteger('quantidade');
         const ficha = await checkUser(interaction.db, interaction.user.id);
-        const acoes = ficha.fundos.filter((element) =>{return element.qtd != 0})
-        let preco = 1 - (((ficha.bews.length - 1) / 80) - (ficha.torre.nivel / 50) - (cofre / 10) - (acoes / 20) + (ficha.mina.local / 10))
+        const acoes = ficha.fundos.filter((element) =>{return element.qtd >= 100})
+        let preco = 1 - (((ficha.bews.length - 1) / 80) + (ficha.torre.nivel / 50) + (ficha.cofre / 10) + (acoes.length / 20) + (ficha.mina.local / 50))
+        preco = (preco < 0.1)?0.09:preco;
         preco = parseFloat(preco.toFixed(2))
 
         if(!quantidade){
@@ -53,7 +55,7 @@ module.exports = class extends comando{
         const valor = Math.round(preco * quantidade)
         ficha.rewbs += valor;
         ficha.mina.carvoes -= quantidade;
-        txt = 'Parabéns você vendeu **' + quantidade + '** de carvões!!!\n' + 
+        let txt = 'Parabéns você vendeu **' + quantidade + '** de carvões!!!\n' + 
         `Você recebeu **${valor} Rewbs**!\n`
         
         await updateUser(interaction.db, ficha, interaction.channel);
