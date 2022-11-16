@@ -48,7 +48,7 @@ module.exports = class extends comando{
 
         const rowButton = new MessageActionRow().addComponents([new MessageButton().setStyle('DANGER').setLabel('Minerar ⛏').setCustomId('Minerar')]);
 
-        if(this.localPreco <= ficha.rewbs && this.picaretaPreco <= ficha.mina.carvoes && ficha.mina.local < 4){
+        if(this.localPreco <= ficha.rewbs && Math.ceil(this.localPreco / 2) <= ficha.mina.carvoes && ficha.mina.local < 4){
             rowButton.addComponents([new MessageButton().setStyle('SECONDARY').setLabel('Próximo Local').setCustomId('Local')]);
         }if(ficha.mina.picareta * 1000 <= ficha.mina.carvoes && ficha.mina.picareta < 4){
             if(ficha.mina.picareta == 3){
@@ -123,7 +123,7 @@ module.exports = class extends comando{
                 break;
             }
         });collector.on('end', async(i) => {
-            enviada.edit({embeds: [msg], components: []});
+            i.edit({embeds: [msg], components: []});
             if(carvoesMinerados != 0){
                 const fulano = await checkUser(interaction.db, ficha._id);
                 fulano.mina.carvoes += carvoesMinerados;
@@ -134,15 +134,15 @@ module.exports = class extends comando{
 
     contruir = async(interaction, ficha) =>{
         
-        if(ficha.rewbs < 3000){
-            interaction.reply({content: `Para contruir uma mina é preciso pagar **3000** Rewbs.`, ephemeral: true});    
+        if(ficha.rewbs < 1000){
+            interaction.reply({content: `Para contruir uma mina é preciso pagar **1000** Rewbs.`, ephemeral: true});    
             return
         }
 
         let msg = new MessageEmbed()
             .setTitle('Contruir uma mina!')
             .setColor(0x700000)
-            .setDescription(`**◇◆ ▬▬▬▬▬▬▬◆◇◆◇▬▬▬▬▬▬▬ ◆◇**\n` + `Para construir uma mina é preciso **3000** Rewbs.\nVocê tem certeza que quer completar essa compra?`
+            .setDescription(`**◇◆ ▬▬▬▬▬▬▬◆◇◆◇▬▬▬▬▬▬▬ ◆◇**\n` + `Para construir uma mina é preciso **1000** Rewbs.\nVocê tem certeza que quer completar essa compra?`
             + `\n**◇◆ ▬▬▬▬▬▬▬◆◇◆◇▬▬▬▬▬▬▬ ◆◇**`)
             .setFooter({text: 'WK Company', iconURL: 'https://i.imgur.com/B73wyqP.gif'});
         const enviada = await interaction.reply({ embeds: [msg], fetchReply: true });
@@ -159,10 +159,11 @@ module.exports = class extends comando{
                 picareta: 1,
                 bewMinerador: null
             }
+            ficha.rewbs -= 1000;
             this.localPreco = ficha.mina.local; this.picaretaPreco = ficha.mina.picareta;
 
             const local = listaMinasPicaretas('local', ficha.mina.local);
-            const picareta = listaMinasPicaretas('picareta', ficha.mina.picareta)
+            const picareta = listaMinasPicaretas('picareta', ficha.mina.picareta);
             await updateUser(interaction.db, ficha);
             msg = new MessageEmbed()
                 .setTitle('Mina de Carvão')
@@ -170,7 +171,7 @@ module.exports = class extends comando{
                 .setDescription(`**◇◆ ▬▬▬▬▬▬◆◇◆◇▬▬▬▬▬▬ ◆◇**\n**Carvões:** ${ficha.mina.carvoes} // **Picareta:** ${picareta[0]} \n**Local: ${local[0]}**`+
                 `\n**◇◆ ▬▬▬▬▬▬◆◇◆◇▬▬▬▬▬▬ ◆◇**\nPara começar a minerar mande o comando novamente.` + '\n**◇◆ ▬▬▬▬▬▬◆◇◆◇▬▬▬▬▬▬ ◆◇**' +
                 `\nPróximo local: **${this.localPreco} Rewbs** e **${Math.ceil(this.localPreco / 2)} Carvões**` +
-                `\nPróxima picareta: **${this.picaretaPreco} Carvões.`)
+                `\nPróxima picareta: **${this.picaretaPreco} Carvões**.`)
                 .setImage(local[2])
                 .setFooter({text: 'WK Company', iconURL: 'https://i.imgur.com/B73wyqP.gif'}).setTimestamp()
             await enviada.edit({embeds: [msg]})
