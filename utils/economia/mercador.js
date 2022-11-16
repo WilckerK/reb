@@ -72,12 +72,12 @@ module.exports = async(client, message) =>{
         case 'Brasão': ficha.bras.brasoes[mercadoria[1][2][5]] += mercadoria[1][0]
         break;
         case 'Comida': let index;
-            index = ficha.geladeira.findIndex(e => {return e[0] == mercadoria[0][2][0]})
+            index = ficha.geladeira.findIndex(e => {return e[0] == mercadoria[1][2][0]})
             if(index != -1){
                 ficha.geladeira[index][5] += mercadoria[1][0];
             }else{
+                mercadoria[1][2][5] = mercadoria[1][0]
                 ficha.geladeira.push(mercadoria[1][2])
-                ficha.geladeira[ficha.geladeira.length - 1].push(mercadoria[1][0])
             }
         break;
         case 'Fundo': ficha.fundos.find(e =>{return e.nome === mercadoria[1][2]}).qtd += mercadoria[1][0];

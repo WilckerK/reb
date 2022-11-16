@@ -21,6 +21,13 @@ module.exports = class extends comando{
                     type:'STRING',
                     description: 'Qual item vai oferecer?',
                     required: true
+                },
+                
+                {
+                    name: 'quantidade',
+                    type:'INTEGER',
+                    description: 'Quanto vai oferecer?',
+                    required: true
                 }
             ]
         })
@@ -35,6 +42,7 @@ module.exports = class extends comando{
         }
 
         const item = interaction.options.getString('item').toLowerCase();
+        const quantidade = interaction.options.getInteger('quantidade');
         const fichaA = await checkUser(interaction.db, userA);
 
         let indexDoItem = -1;
@@ -50,6 +58,10 @@ module.exports = class extends comando{
             interaction.reply({content: 'Você não tem esse item para presentear ou escreveu errado.', ephemeral: true})
             return
         }
+        if(fichaA.geladeira[indexDoItem][5] < quantidade){
+            interaction.reply({content: 'Você não tem essa quantidade para doar.', ephemeral: true})
+            return
+        }
         const presente = [].concat(fichaA.geladeira[indexDoItem]);
 
         const fichaB = await checkUser(interaction.db, userB);
@@ -61,11 +73,11 @@ module.exports = class extends comando{
                 break;       
             }
         }
-        if(jaTem != -1){fichaB.geladeira[jaTem][5] += 1;
-        }else{presente[5] = 1;await fichaB.geladeira.push(presente);
+        if(jaTem != -1){fichaB.geladeira[jaTem][5] += quantidade;
+        }else{presente[5] = quantidade;await fichaB.geladeira.push(presente);
         }
 
-        fichaA.geladeira[indexDoItem][5] = (fichaA.geladeira[indexDoItem][5] - 1);
+        fichaA.geladeira[indexDoItem][5] -= quantidade;
         if(fichaA.geladeira[indexDoItem][5] == 0){
             fichaA.geladeira.splice(indexDoItem, 1);
         }
@@ -78,7 +90,7 @@ module.exports = class extends comando{
             .setTitle('Presente!')
             .setColor(0x700000)
             .setDescription(`**Presentinho:**\n<@${userA}> acaba de presentear <@${userB}>.`+`\n**◇◆ ▬▬▬▬▬▬▬◆◇◆◇▬▬▬▬▬▬▬ ◆◇**\n` +
-            `Foi doado um ${presente[0]} **${presente[3]}**` + `\n**◇◆ ▬▬▬▬▬▬▬◆◇◆◇▬▬▬▬▬▬▬ ◆◇**`)
+            `Foi doado **${quantidade}** ${presente[0]} **${presente[3]}**` + `\n**◇◆ ▬▬▬▬▬▬▬◆◇◆◇▬▬▬▬▬▬▬ ◆◇**`)
             .setFooter({text: 'WK Company', iconURL: 'https://i.imgur.com/B73wyqP.gif'});
         await interaction.reply({embeds: [msg]});
 

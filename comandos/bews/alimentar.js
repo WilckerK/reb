@@ -154,7 +154,7 @@ module.exports = class extends comando{
     todos = async(interaction, ficha) => {
         let txtAlimentados = '';
         const bewDB = await interaction.db.collection('bews');
-        const limite = (ficha.bews.length > 15)?15:ficha.bews.length - 1;
+        const limite = (ficha.bews.length > 15)?15:ficha.bews.length;
         let colora, link = (ficha.bews.length > 4)?Math.ceil(Math.random() * 4):Math.ceil(Math.random() * ficha.bews.length);
         for (let i = 1; i < limite; i++) {
             const element = ficha.bews[i];

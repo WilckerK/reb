@@ -22,6 +22,10 @@ module.exports = class extends comando{
 
     run = async(interaction) => {
         const ficha = await checkUser(interaction.db, interaction.member.id);
+        if (ficha.mina.local == 0){
+            interaction.reply({content: 'Primeiro você precisa construir uma mina.', ephemeral: true});
+            return
+        }
         let bewDoUser;
         if(ficha.mina.bewMinerador == null){
             const nomeDoBew =  interaction.options.getString('nome')

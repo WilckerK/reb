@@ -52,11 +52,11 @@ module.exports = class extends Evento {
             }
 
             //missões
-            if(Math.ceil(Math.random() * 180) == 180 && message.channelId != '1028819143992025099'){
+            if(Math.ceil(Math.random() * 190) == 190 && message.channelId != '1028819143992025099'){
                 const rbw = await this.client.guilds.cache.get('732276333429784707');
                 if(await rbw.channels.cache.get('1028819143992025099').name != '『📕』missão'){
                     const missoes = require('../../utils/bews/editar/missoes');
-                    //await missoes(this.client);
+                    await missoes(this.client);
                 }
             }
 

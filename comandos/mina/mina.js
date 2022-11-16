@@ -142,7 +142,7 @@ module.exports = class extends comando{
         let msg = new MessageEmbed()
             .setTitle('Contruir uma mina!')
             .setColor(0x700000)
-            .setDescription(`**◇◆ ▬▬▬▬▬▬▬◆◇◆◇▬▬▬▬▬▬▬ ◆◇**\n` + `Para construir uma mina é preciso **2000** Rewbs.\nVocê tem certeza que quer completar essa compra?`
+            .setDescription(`**◇◆ ▬▬▬▬▬▬▬◆◇◆◇▬▬▬▬▬▬▬ ◆◇**\n` + `Para construir uma mina é preciso **3000** Rewbs.\nVocê tem certeza que quer completar essa compra?`
             + `\n**◇◆ ▬▬▬▬▬▬▬◆◇◆◇▬▬▬▬▬▬▬ ◆◇**`)
             .setFooter({text: 'WK Company', iconURL: 'https://i.imgur.com/B73wyqP.gif'});
         const enviada = await interaction.reply({ embeds: [msg], fetchReply: true });

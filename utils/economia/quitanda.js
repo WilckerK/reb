@@ -14,7 +14,7 @@ try{
         for (let i = 1; i < emojis.length; i++) {
             const element = emojis[i];
             if(element != emojis[0]){
-                await message.channel.send({content: 'Você precisa mandar apenas emojis iguais para comprar vários da mesma opção.'})
+                await message.reply({content: 'Você precisa mandar apenas emojis iguais para comprar vários da mesma opção.'})
                 return
             }
         }
@@ -25,18 +25,18 @@ try{
     let painelComidas = painel.comidas.filter(element => {
         return element[0] == emojis[0]
     });
-    if(!painelComidas){
-        await message.channel.send({content: "Essa opção não está a venda. Tente escolher uma das disponíveis."});
+    if(painelComidas.length == 0){
+        await message.reply({content: "Essa opção não está a venda. Tente escolher uma das disponíveis."});
         return
     }
+    painelComidas = painelComidas[0];
 
     const ficha = await checkUser(db, user);
 
     if(ficha.rewbs < emojis.length * painelComidas[2]){
-        await message.channelId.send({content: "Você não tem Rewbs o suficiente pra concluir a compra."});
+        await message.reply({content: "Você não tem Rewbs o suficiente pra concluir a compra."});
         return
     }
-    painelComidas = painelComidas[0];
 
     ficha.rewbs -= emojis.length * painelComidas[2];
 
