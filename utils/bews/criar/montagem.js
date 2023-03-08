@@ -78,7 +78,7 @@ module.exports = async (db, bew, client) =>{
     let checkImageUp = false;
     const { MessageAttachment, MessageEmbed} = require('discord.js');
     do{
-        const channel = await client.channels.fetch('1001243468435292220') //enviar para o chat de bews
+        const channel = await client.channels.fetch('1001243468435292220') //envar para o chat de bews
         const file = new MessageAttachment(`cache/${bew._id}.png`);
         let msg = new MessageEmbed()
             .setTitle(bew._id)
